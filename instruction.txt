@@ -1,0 +1,4 @@
+程序使用说明书：
+1.打开terminal，调整目录到zombie （cd zombie）
+2.安装node之后在命令行输入node zombie.js, 结果会自动显示在terminal上。
+3.如需调整参数，请看zombie.js 1-2行
