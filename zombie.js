@@ -107,13 +107,13 @@ class Zombie extends Creature {
         this.isMovementEnd = false;
     }
 
-    action(moveOneStep, axis, isBorder1, isBorder2, d) {
+    action(move, moveOneStep, axis, isBorder1, isBorder2) {
         if (axis === isBorder1) {
             axis = isBorder2;
         } else {
            axis += moveOneStep; 
         }   
-        if (d === "x") {
+        if (move === "L" || move === "R") {
            this.x = axis; 
         } else {
            this.y = axis; 
@@ -127,36 +127,33 @@ class Zombie extends Creature {
                 axis: this.x,
                 isBorder1: 0,
                 isBorder2: mapSize -1,
-                d: "x"
             },
             "R": {
                 moveOneStep: 1,
                 axis: this.x,
                 isBorder1: mapSize - 1,
                 isBorder2: 0,
-                d: "x"
             },
             "U": {
                 moveOneStep: 1,
                 axis: this.y,
                 isBorder1: mapSize - 1,
                 isBorder2: 0,
-                d: "y"
             },
             "D": {
                 moveOneStep: -1,
                 axis: this.y,
                 isBorder1: 0,
                 isBorder2: mapSize - 1,
-                d: "y"
             }
         }
+
         this.action(
+            move,
             commandTable[move].moveOneStep, 
             commandTable[move].axis, 
             commandTable[move].isBorder1, 
             commandTable[move].isBorder2,
-            commandTable[move].d
         );
     }
 
