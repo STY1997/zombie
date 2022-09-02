@@ -56,8 +56,8 @@ function deconstructure(input) {
     mapSize = input.gridSize;
     // console.log(creatureList)
     // console.log(zombieList)
-    console.log("map size: ",mapSize)
-    console.log("command", commands)
+    // console.log("map size: ",mapSize)
+    // console.log("command", commands)
     zombieList.forEach(zombie => {
         let x = zombie.x;
         let y = zombie.y;
@@ -107,6 +107,60 @@ class Zombie extends Creature {
         this.isMovementEnd = false;
     }
 
+    action(moveOneStep, axis, isBorder1, isBorder2, d) {
+        if (axis === isBorder1) {
+            axis = isBorder2;
+        } else {
+           axis += moveOneStep; 
+        }   
+        if (d === "x") {
+           this.x = axis; 
+        } else {
+           this.y = axis; 
+        }
+    }
+
+    oneStep = (move) => {
+        let commandTable = {
+            "L": {
+                moveOneStep: -1,
+                axis: this.x,
+                isBorder1: 0,
+                isBorder2: mapSize -1,
+                d: "x"
+            },
+            "R": {
+                moveOneStep: 1,
+                axis: this.x,
+                isBorder1: mapSize - 1,
+                isBorder2: 0,
+                d: "x"
+            },
+            "U": {
+                moveOneStep: 1,
+                axis: this.y,
+                isBorder1: mapSize - 1,
+                isBorder2: 0,
+                d: "y"
+            },
+            "D": {
+                moveOneStep: -1,
+                axis: this.y,
+                isBorder1: 0,
+                isBorder2: mapSize - 1,
+                d: "y"
+            }
+        }
+        this.action(
+            commandTable[move].moveOneStep, 
+            commandTable[move].axis, 
+            commandTable[move].isBorder1, 
+            commandTable[move].isBorder2,
+            commandTable[move].d
+        );
+    }
+
+
     move() {
         for (let i = 0; i < this.movement.length; i++) {
             this.oneStep(this.movement[i]);
@@ -131,81 +185,51 @@ class Zombie extends Creature {
     }
 
     //move one step
-    oneStep(move) {
-        // const commandTable = {
-        //     "L": {
-        //         action: () => {
-        //             //console.log("action1")
-        //             if (this.x === 0) {
-        //                 this.x = mapSize - 1;
-        //             } else {
-        //                this.x--; 
-        //             } 
-        //         }
-        //     },
-        //     "R": {
-        //         action: () => {
-        //             //console.log("action2")
-        //             if (this.x === mapSize - 1) {
-        //                 this.x = 0;
-        //             } else {
-        //                 this.x++;
-        //             }
-        //         }
-        //     },
-        //     "U": {
-        //         action: () => {
-        //             //console.log("action3")
-        //             if (this.y === mapSize - 1) {
-        //                 this.y = 0;
-        //             } else {
-        //                 this.y++;
-        //             }
-        //         }
-        //     },
-        //     "D": {
-        //         action: () => {
-        //             //console.log("action4")
-        //             if (this.y === 0) {
-        //                 this.y = mapSize - 1;
-        //             } else {
-        //                this.y--; 
-        //             }  
-        //         }
-        //     }
-        // }
-        const commandTable = {
-
-            "L": {
-                moveOneStep: -1,
-                axis: this.x,
-                isBorder: 0
-            },
-            "R": {
-                moveOneStep: 1,
-                axis: this.x,
-                isBorder: mapSize - 1
-            },
-            "U": {
-                moveOneStep: 1,
-                axis: this.y,
-                isBorder: mapSize - 1
-            },
-            "D": {
-                moveOneStep: -1,
-                axis: this.y,
-                isBorder: 0
-            }
-        }
-        function action(moveOneStep, axis, isBorder) {
-            if (axis === 0) {
-                axis = isBorder;
-            } else {
-               axis + moveOneStep; 
-            }   
-        }
-        action(commandTable[move].moveOneStep, commandTable[move].axis, commandTable[move.isBorder]);
-    }
+    // oneStep(move) {
+    //     const commandTable = {
+    //         "L": {
+    //             action: () => {
+    //                 //console.log("action1")
+    //                 if (this.x === 0) {
+    //                     this.x = mapSize - 1;
+    //                 } else {
+    //                    this.x--; 
+    //                 } 
+    //             }
+    //         },
+    //         "R": {
+    //             action: () => {
+    //                 //console.log("action2")
+    //                 if (this.x === mapSize - 1) {
+    //                     this.x = 0;
+    //                 } else {
+    //                     this.x++;
+    //                 }
+    //             }
+    //         },
+    //         "U": {
+    //             action: () => {
+    //                 //console.log("action3")
+    //                 if (this.y === mapSize - 1) {
+    //                     this.y = 0;
+    //                 } else {
+    //                     this.y++;
+    //                 }
+    //             }
+    //         },
+    //         "D": {
+    //             action: () => {
+    //                 //console.log("action4")
+    //                 if (this.y === 0) {
+    //                     this.y = mapSize - 1;
+    //                 } else {
+    //                    this.y--; 
+    //                 }  
+    //             }
+    //         }
+    //     }
+    //     commandTable[move].action();
+    // }
 
     // oneStep(move) {
     //     switch(move) {
