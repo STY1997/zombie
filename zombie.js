@@ -105,59 +105,29 @@ class Zombie extends Creature {
         this.name = name;
         this.isInfected = true;
         this.isMovementEnd = false;
-    }
-
-    action(move, moveOneStep, axis, isBorder1, isBorder2) {
-        if (axis === isBorder1) {
-            axis = isBorder2;
-        } else {
-           axis += moveOneStep; 
-        }   
-        if (move === "L" || move === "R") {
-           this.x = axis; 
-        } else {
-           this.y = axis; 
+        this.commandTable = {
+            "L": [-1, 0],
+            "R": [1, 0],
+            "U": [0, 1],
+            "D": [0, -1]
         }
     }
 
-    oneStep = (move) => {
-        let commandTable = {
-            "L": {
-                moveOneStep: -1,
-                axis: this.x,
-                isBorder1: 0,
-                isBorder2: mapSize -1,
-            },
-            "R": {
-                moveOneStep: 1,
-                axis: this.x,
-                isBorder1: mapSize - 1,
-                isBorder2: 0,
-            },
-            "U": {
-                moveOneStep: 1,
-                axis: this.y,
-                isBorder1: mapSize - 1,
-                isBorder2: 0,
-            },
-            "D": {
-                moveOneStep: -1,
-                axis: this.y,
-                isBorder1: 0,
-                isBorder2: mapSize - 1,
+    oneStep(move) {
+        let newPosition = [this.x + this.commandTable[move][0], this.y + this.commandTable[move][1]];
+        newPosition.forEach(element => {
+            if (element === mapSize) {
+                element = 0;
+            } else if (element === -1) {
+                element = mapSize - 1
             }
-        }
+        });
 
-        this.action(
-            move,
-            commandTable[move].moveOneStep, 
-            commandTable[move].axis, 
-            commandTable[move].isBorder1, 
-            commandTable[move].isBorder2,
-        );
+        this.x = newPosition[0];
+        this.y = newPosition[1];   
     }
 
-
+    
     move() {
         for (let i = 0; i < this.movement.length; i++) {
             this.oneStep(this.movement[i]);
