@@ -36,9 +36,7 @@ const input = {"gridSize": 5,
     "commands": "RDLDD"
 }
 
-// import {creature_class, zombie_class} from 'class.js';
-// import {input} from 'data.js';
-
+//variables
 let zombieList;
 let creatureList;
 let commands;
@@ -48,16 +46,15 @@ const creatureClassList = [];
 const zombieClassList = []
 let zombieQueue = [];
 
-//Deconstructe the input data
+/**
+ * 
+ * @param {*} input 
+ */
 function deconstructure(input) {
     commands = input.commands;
     zombieList = input.zombie;
     creatureList = input.creatures;
     mapSize = input.gridSize;
-    // console.log(creatureList)
-    // console.log(zombieList)
-    // console.log("map size: ",mapSize)
-    // console.log("command", commands)
     zombieList.forEach(zombie => {
         let x = zombie.x;
         let y = zombie.y;
@@ -113,18 +110,20 @@ class Zombie extends Creature {
         }
     }
 
+    //move one step
     oneStep(move) {
         let newPosition = [this.x + this.commandTable[move][0], this.y + this.commandTable[move][1]];
+        let newP = [];
         newPosition.forEach(element => {
             if (element === mapSize) {
                 element = 0;
             } else if (element === -1) {
                 element = mapSize - 1
             }
+            newP.push(element);
         });
-
-        this.x = newPosition[0];
-        this.y = newPosition[1];   
+        this.x = newP[0];
+        this.y = newP[1];   
     }
 
     
@@ -150,88 +149,6 @@ class Zombie extends Creature {
         }
         this.isMovementEnd = true;
     }
-
-    //move one step
-    // oneStep(move) {
-    //     const commandTable = {
-    //         "L": {
-    //             action: () => {
-    //                 //console.log("action1")
-    //                 if (this.x === 0) {
-    //                     this.x = mapSize - 1;
-    //                 } else {
-    //                    this.x--; 
-    //                 } 
-    //             }
-    //         },
-    //         "R": {
-    //             action: () => {
-    //                 //console.log("action2")
-    //                 if (this.x === mapSize - 1) {
-    //                     this.x = 0;
-    //                 } else {
-    //                     this.x++;
-    //                 }
-    //             }
-    //         },
-    //         "U": {
-    //             action: () => {
-    //                 //console.log("action3")
-    //                 if (this.y === mapSize - 1) {
-    //                     this.y = 0;
-    //                 } else {
-    //                     this.y++;
-    //                 }
-    //             }
-    //         },
-    //         "D": {
-    //             action: () => {
-    //                 //console.log("action4")
-    //                 if (this.y === 0) {
-    //                     this.y = mapSize - 1;
-    //                 } else {
-    //                    this.y--; 
-    //                 }  
-    //             }
-    //         }
-    //     }
-    //     commandTable[move].action();
-    // }
-
-    // oneStep(move) {
-    //     switch(move) {
-    //         case "L":
-    //             if (this.x === 0) {
-    //                 this.x = mapSize - 1;
-    //             } else {
-    //                this.x--; 
-    //             }  
-    //             break;
-    //         case "R":
-    //             if (this.x === mapSize - 1) {
-    //                 this.x = 0;
-    //             } else {
-    //                 this.x++;
-    //             }
-    //             break;
-    //         case "U":
-    //             if (this.y === mapSize - 1) {
-    //                 this.y = 0;
-    //             } else {
-    //                 this.y++;
-    //             }
-    //             break;
-    //         case "D":
-    //             if (this.y === 0) {
-    //                 this.y = mapSize - 1;
-    //             } else {
-    //                this.y--; 
-    //             }  
-    //             break;
-    //         default:
-    //             console.log("ignore illegal command: " + move) 
-    //     }
-    // }
 
     //print the final position
     finalPosition() {
@@ -263,15 +180,6 @@ function run() {
     });
 }
 
-function shallowClone(source) {
-    var target = {};
-    for(var i in source) {
-        if (source.hasOwnProperty(i)) {
-            target[i] = source[i];
-        }
-    }
-    return target;
-}
 
 //程序使用说明书：
 //1.打开terminal，调整目录到zombie
